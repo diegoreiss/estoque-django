@@ -1,6 +1,41 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render
+from django.core.paginator import Paginator
+from django.views.decorators.http import require_GET
+
+from .models import Products
 
 # Create your views here.
 
+QUANTIDADE_POR_PAGINA = 1
+
+@require_GET
 def index(request):
-    return HttpResponse("Go to /admin")
+    numero_da_pagina = request.GET.get("page")
+
+    if not numero_da_pagina:
+        numero_da_pagina = 1
+    
+    paginator_produtos = Paginator(Products.objects.all(), QUANTIDADE_POR_PAGINA)
+    elided = list(paginator_produtos.get_elided_page_range(number=numero_da_pagina, on_each_side=3, on_ends=1))
+    pagina = paginator_produtos.get_page(numero_da_pagina)
+    
+    context = {
+        "pagina_atual": int(numero_da_pagina),
+        "pagina_anterior": pagina.previous_page_number() if pagina.has_previous() else None,
+        "proxima_pagina": pagina.next_page_number() if pagina.has_next() else None,
+        "total_paginas": str(paginator_produtos.num_pages),
+        "pagina_elided": elided,
+        "dados_pagina": pagina,
+        "ellipsis": str(paginator_produtos.ELLIPSIS)
+    }
+
+    return render(request, "estoque/index.html", context)
+
+
+def product_detail(request, id):
+    product = Products.objects.get(id=id)
+    context = {
+        "product": product
+    }
+
+    return render(request, 'estoque/product_detail.html', context)

@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% include 'includes/links.html' %}
+  {% include 'includes/scripts.html' %}
+  <title>Estoque</title>
+</head>
+<body>
+  {% include 'includes/navbar.html' %}
+
+  <table class="table container my-4">
+    <thead>
+      <tr>
+        <th scope="col">Código</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Preço</th>
+        <th scope="col">Quantidade</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for produto in dados_pagina %}
+        <tr>
+          <td>{{produto.cod}}</td>
+          <td><a href="{% url 'product' produto.id %}">{{produto.name}}</a></td>
+          <td>{{produto.price}}</td>
+          <td>{{produto.qtd}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <nav class="d-flex justify-content-center" aria-label="Page navigation example">
+    <ul class="pagination">
+      {% for pagina in pagina_elided %}
+        {% if pagina == pagina_atual %}
+          <li class="page-item active"><span class="page-link user-select-none">{{pagina}}</span></li>
+        {% elif pagina == ellipsis %}
+          <li class="page-item disabled">
+            <span class="page-link">{{pagina}}</span>
+          </li>
+        {% else %}
+          <li class="page-item"><a class="page-link" href="{% url 'home' %}?page={{pagina}}">{{pagina}}</a></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </nav>
+</body>
+</html>
