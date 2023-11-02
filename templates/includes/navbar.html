@@ -12,6 +12,7 @@
           </a>
           <ul class="dropdown-menu">
             <li><button data-bs-toggle="modal" data-bs-target="#backdropCriarProduto" class="dropdown-item" href="#">Adicionar Produto</button></li>
+            <li><a class="dropdown-item" href="{% url 'home' %}?page=1&fora-stock">Mostrar itens fora do estoque</a></li>
           </ul>
         </li>
       </ul>
@@ -23,18 +24,53 @@
   </div>
 </nav>
 <div class="modal fade" id="backdropCriarProduto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="staticBackdropLabel">Criar Produto</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary">Criar</button>
+        <form id="formCriarProduto" action="{% url 'add-product' %}" method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input name="name" type="text" class="form-control" id="name" placeholder="ex: Little product">
+          </div>
+          <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+            <select name="category" id="category" class="form-select" aria-label="Default select example">
+              <option selected>Selecione uma categoria</option>
+              {% for categoria in categorias %}
+                <option value="{{categoria.id}}">{{categoria.name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="picure" class="form-label">Picture</label>
+            <input class="form-control" type="file" id="picture">
+          </div>
+          <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input name="price" type="number" class="form-control" id="price" placeholder="ex: 1,50">
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea name="description" type="text" class="form-control" id="description" placeholder="ex: Awesome Product!!!"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="quantity" class="form-label">Quantity</label>
+            <input name="quantity" type="number" class="form-control" id="quantity" placeholder="ex: 1">
+          </div>
+          <div class="mb-3">
+            <label for="discount" class="form-label">Discount</label>
+            <input name="discount" type="number" class="form-control" id="discount" placeholder="ex: 1">
+          </div>
+          <div class="modal-footer">
+            <button id="btn-sair-form-produto" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Criar</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

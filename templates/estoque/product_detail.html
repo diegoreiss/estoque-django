@@ -1,2 +1,30 @@
-<h1>{{product}}</h1>
-<img src="{{product.picture.url}}" alt="" srcset="">
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% include 'includes/links.html' %}
+  <title>Product Detail</title>
+</head>
+<body>
+  <div class="d-flex flex-column justify-content-center align-items-center m-4">
+    <div class="d-flex justify-content-center gap-5">
+      <div>
+        <img src="{{product.picture.url}}" alt="" srcset="">
+        <div class="d-flex justify-content-center pt-5 gap-3">
+          <a class="btn btn-danger" href="{% url 'delete-product' product.id %}">Excluir produto</a>
+          <a class="btn btn-danger" href="{% url 'sell-product' product.id %}">Vender unidade</a>
+        </div>
+      </div>
+      <div>
+        <h1>Nome: {{product.name}}</h1>
+        <h1>Preço: {{product.price}}</h1>
+        <h1>Em estoque? {{product.in_stock}}</h1>
+        <h1>Quantidade: {{product.qtd}}</h1>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
